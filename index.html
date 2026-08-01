@@ -179,7 +179,7 @@
   .who{
     font-size:10.5px;font-weight:700;border-radius:999px;padding:2.5px 9px;
     white-space:nowrap;flex:0 0 auto;
-    box-shadow:inset 0 0 0 1px rgba(94,68,80,.07)
+    box-shadow:inset 0 0 0 1px rgba(94,68,80,.06)
   }
   .lead{flex:1 1 auto;min-width:10px}
   .g{font-size:12.5px;font-weight:600;color:var(--ink-mid);flex:0 0 auto;font-variant-numeric:tabular-nums}
@@ -321,7 +321,7 @@ function palette(hex){
     pale:  hslToHex(h, clamp(s * .6, 20, 58), clamp(l + 30, 74, 90)),
     cream: hslToHex(h, clamp(s * .38, 10, 34), 94),
     deep:  hslToHex(h, clamp(s * 1.05, 34, 88), clamp(l - 18, 24, 46)),
-    chip:  c[1] < 10 ? hslToHex(0, 0, 86) : hslToHex(h, clamp(s, 34, 82), 84),
+    chip:  c[1] < 10 ? hslToHex(0, 0, clamp(l, 26, 74)) : hslToHex(h, clamp(s, 32, 88), clamp(l, 32, 72)),
     wash:  hslToHex(h, clamp(s * .5, 16, 46), 96)
   };
 }
@@ -796,23 +796,53 @@ function buildSVG(r, animate, gk){
 function safeColor(c, fallback){
   return /^#[0-9a-fA-F]{6}$/.test(String(c)) ? String(c) : (fallback || '#FF9EC1');
 }
-function textOn(cols){
-  let lum = 0;
-  cols.forEach(function(c){
-    const rgb = hexToRgb(c);
-    lum += (rgb[0]*0.299 + rgb[1]*0.587 + rgb[2]*0.114) / 255;
+const CHIP_INK = '#3A2B32';
+/* WCAG 상대 휘도 */
+function relLum(hex){
+  const v = hexToRgb(hex).map(function(x){
+    x /= 255;
+    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
   });
-  return (lum / cols.length) > 0.62 ? '#4A3640' : '#FFFFFF';
+  return 0.2126*v[0] + 0.7152*v[1] + 0.0722*v[2];
+}
+function contrastRatio(a, b){
+  const la = relLum(a), lb = relLum(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+/* 배경이 밝으면 검정, 어두우면 흰색 */
+function textOn(cols){
+  let minW = 99, minI = 99;
+  cols.forEach(function(c){
+    minW = Math.min(minW, contrastRatio('#FFFFFF', c));
+    minI = Math.min(minI, contrastRatio(CHIP_INK, c));
+  });
+  return minW >= minI ? '#FFFFFF' : CHIP_INK;
+}
+/* 고른 글자색으로 읽히도록 배경 밝기를 살짝만 조정 */
+function fitBg(hex, fg){
+  const c = rgbToHsl.apply(null, hexToRgb(hex));
+  const h = c[0], sat = clamp(c[1], 0, 92);
+  let l = c[2];
+  const dir = (fg === '#FFFFFF') ? -1 : 1;
+  for (let i = 0; i < 22; i++){
+    const col = hslToHex(h, sat, clamp(l, 10, 94));
+    if (contrastRatio(fg, col) >= 4.5) return col;
+    l += dir * 4;
+    if (l < 10 || l > 94) break;
+  }
+  return hslToHex(h, sat, clamp(l, 10, 94));
 }
 /* 이름표 — 한 명이면 그 색, 여러 명이면 색끼리 그라데이션 */
 function whoChip(name, cols){
-  const c = ((cols && cols.length) ? cols : ['#FF9EC1']).map(function(x){ return safeColor(x); });
+  const raw = ((cols && cols.length) ? cols : ['#FF9EC1']).map(function(x){ return safeColor(x); });
+  const fg = textOn(raw);
+  const c = raw.map(function(x){ return fitBg(x, fg); });
   const bg = c.length > 1
     ? 'linear-gradient(100deg,' + c.map(function(x, i){
         return x + ' ' + Math.round(i / (c.length - 1) * 100) + '%';
       }).join(',') + ')'
     : c[0];
-  return '<span class="who" style="background:' + bg + ';color:' + textOn(c) + '">' + esc(name) + '</span>';
+  return '<span class="who" style="background:' + bg + ';color:' + fg + '">' + esc(name) + '</span>';
 }
 
 function esc(s){
