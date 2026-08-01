@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>파르페 메이커 ♡</title>
+<meta name="description" content="이름과 색을 정하면 어울리는 파르페를 만들어 드려요. 두 명 이상이면 한 잔에 같이 쌓입니다.">
+<link rel="icon" type="image/png" href="MOMO.png">
+<link rel="apple-touch-icon" href="MOMO.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --heart:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 18'><path d='M10 17.5C-2 9.8 -.5 1 5.2 1 7.6 1 9.3 2.6 10 4.2 10.7 2.6 12.4 1 14.8 1 20.5 1 22 9.8 10 17.5Z'/></svg>");
+    --card:#FFFFFF;
+    --pink:#FF9EC1;
+    --pink-deep:#FF6FA5;
+    --pink-soft:#FFD3E4;
+    --pink-line:#FFE4EE;
+    --wash:#FFF3F8;
+    --ink:#5E4450;
+    --ink-mid:#AC8A99;
+    --ink-soft:#D3B4C2;
+    --r:34px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:linear-gradient(180deg,#FFE9F1 0%, #FFF1F6 46%, #FFF6F9 100%) fixed;
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    font-weight:400;letter-spacing:-.015em;
+    -webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:64px 14px 46px}
+
+  /* ---------- header ---------- */
+  .top{text-align:center;margin-bottom:16px}
+  h1{font-size:clamp(25px,4.8vw,32px);font-weight:800;letter-spacing:-.045em;margin:0;color:var(--pink-deep)}
+  h1 span{color:var(--ink)}
+  .sub{
+    display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.26em;
+    color:var(--pink-deep);background:var(--wash);border-radius:999px;
+    padding:5px 13px 4px;margin:9px 0 0
+  }
+  .desc{font-size:13.5px;line-height:1.75;color:var(--ink-mid);max-width:26em;margin:13px auto 0;font-weight:500}
+
+  /* ---------- card ---------- */
+  .card{
+    background:var(--card);border:1.5px solid var(--pink-line);
+    border-radius:var(--r);padding:22px;
+    box-shadow:0 10px 26px -16px rgba(255,111,165,.5)
+  }
+  .card + .card{margin-top:14px}
+
+  .lab{font-size:12.5px;font-weight:700;color:var(--pink-deep);margin:0 0 11px;letter-spacing:-.02em}
+  .divider{height:1px;margin:18px 0;background:var(--pink-line)}
+
+  /* ---------- tags ---------- */
+  .tags{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .tag{
+    display:inline-flex;align-items:center;gap:7px;
+    background:var(--wash);
+    border:1.5px solid var(--pink-line);border-radius:999px;padding:6px 7px 6px 8px;
+    animation:pop-in .32s cubic-bezier(.34,1.7,.5,1) backwards;
+    transition:transform .16s cubic-bezier(.34,1.7,.5,1)
+  }
+  .tag:hover{transform:translateY(-1.5px)}
+  .tag:focus-within{border-color:var(--pink);box-shadow:0 0 0 3px var(--wash)}
+  .tag__dot{
+    position:relative;width:22px;height:22px;border-radius:50%;flex:0 0 auto;
+    background:var(--c,#FF9EC1);cursor:pointer;
+    box-shadow:inset 0 -2px 3px rgba(0,0,0,.09), inset 0 2px 2px rgba(255,255,255,.45), 0 0 0 2px #fff;
+    transition:transform .16s cubic-bezier(.34,1.8,.5,1)
+  }
+  .tag__dot:hover{transform:scale(1.14)}
+  .tag__dot input{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;cursor:pointer}
+  .tag input[type=text]{
+    border:0;background:transparent;padding:0;min-width:2.6em;
+    font-family:inherit;font-weight:700;font-size:14.5px;color:var(--ink);letter-spacing:-.02em
+  }
+  .tag input[type=text]:focus{outline:0}
+  .tag input[type=text]::placeholder{color:var(--ink-soft);font-weight:500}
+  .tag__x{
+    border:0;background:transparent;cursor:pointer;color:var(--ink-soft);
+    font-size:12px;line-height:1;padding:5px;border-radius:50%;transition:all .15s
+  }
+  .tag__x:hover{color:var(--pink-deep);background:var(--wash)}
+  .tag--add{
+    background:transparent;border:1.5px dashed var(--pink-soft);
+    color:var(--pink-deep);padding:8px 14px;cursor:pointer;border-radius:999px;
+    font-family:inherit;font-weight:700;font-size:13.5px;letter-spacing:-.02em;
+    transition:transform .16s cubic-bezier(.34,1.7,.5,1), background .16s
+  }
+  .tag--add:hover:not(:disabled){background:var(--wash);transform:scale(1.04)}
+  .tag--add:active:not(:disabled){transform:scale(.93)}
+  .tag--add:disabled{opacity:.45;cursor:not-allowed}
+
+  /* ---------- segmented ---------- */
+  .opt-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .opt-row + .opt-row{margin-top:10px}
+  .opt-row .lab{margin:0;flex:0 0 auto;min-width:56px}
+  .seg{display:flex;gap:4px;background:var(--wash);padding:4px;border-radius:999px;border:1.5px solid var(--pink-line)}
+  .seg button{
+    border:0;background:transparent;cursor:pointer;border-radius:999px;
+    font-family:inherit;font-size:13px;font-weight:600;color:var(--ink-mid);
+    padding:7px 14px;letter-spacing:-.02em;white-space:nowrap;
+    transition:transform .16s cubic-bezier(.34,1.8,.5,1), color .16s, background .16s, box-shadow .16s
+  }
+  .seg button:hover{color:var(--pink-deep)}
+  .seg button:active{transform:scale(.92)}
+  .seg button[aria-pressed=true]{
+    background:#fff;color:var(--pink-deep);font-weight:700;
+    box-shadow:0 1px 4px rgba(255,111,165,.22)
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    font-family:inherit;font-weight:700;font-size:15px;letter-spacing:-.02em;
+    border:0;border-radius:999px;padding:14px 26px;cursor:pointer;
+    transition:transform .15s cubic-bezier(.34,1.8,.5,1), box-shadow .15s, filter .15s
+  }
+  .btn--go{
+    width:100%;margin-top:16px;color:#fff;
+    background:linear-gradient(180deg,var(--pink) 0%, var(--pink-deep) 100%);
+    box-shadow:0 3px 0 #F06A9E, 0 10px 20px -10px rgba(255,111,165,.7)
+  }
+  .btn--go:hover{filter:brightness(1.05);transform:translateY(-1px)}
+  .btn--go:active{transform:translateY(3px);box-shadow:0 0 0 #F06A9E, 0 6px 14px -10px rgba(255,111,165,.7)}
+  .btn--soft{
+    background:var(--wash);color:var(--pink-deep);
+    border:1.5px solid var(--pink-soft);box-shadow:0 2px 0 rgba(255,158,193,.3)
+  }
+  .btn--soft:hover{background:#FFE9F2}
+  .btn--soft:active{transform:translateY(2px);box-shadow:0 0 0}
+  .btn--line{
+    background:#fff;color:var(--ink-mid);border:1.5px solid var(--pink-line);
+    box-shadow:0 2px 0 rgba(255,158,193,.18)
+  }
+  .btn--line:hover{color:var(--pink-deep);border-color:var(--pink-soft)}
+  .btn--line:active{transform:translateY(2px);box-shadow:0 0 0}
+  .btn:focus-visible,.seg button:focus-visible,.tag__x:focus-visible,.tag--add:focus-visible{
+    outline:2.5px solid var(--pink-deep);outline-offset:2px
+  }
+
+  /* ---------- empty ---------- */
+  .empty{text-align:center;padding:24px 14px 28px}
+  .empty svg{width:78px;height:auto;display:block;margin:0 auto 12px}
+  .empty p{margin:0;font-size:13.5px;line-height:1.8;color:var(--ink-mid);font-weight:600}
+  .empty .hint{margin-top:8px;font-size:11.5px;color:var(--ink-soft);font-weight:500}
+
+  /* ---------- result ---------- */
+  .result{display:grid;grid-template-columns:minmax(0,43%) minmax(0,1fr);gap:12px;align-items:center}
+  @media (max-width:640px){ .result{grid-template-columns:1fr;gap:2px} }
+  .stage{display:flex;justify-content:center;align-items:center}
+  .stage svg{width:100%;height:auto;max-height:56vh;display:block}
+  .recipe{padding:4px 4px 4px 6px}
+  @media (max-width:640px){ .recipe{padding:0 4px 4px} }
+
+  .recipe h2{font-size:clamp(19px,3.4vw,24px);font-weight:800;letter-spacing:-.04em;line-height:1.3;margin:0}
+  .meta{
+    display:inline-block;margin:9px 0 0;font-size:11.5px;font-weight:700;color:var(--pink-deep);
+    background:var(--wash);border:1.5px solid var(--pink-line);border-radius:999px;padding:4px 12px
+  }
+  .note{font-size:13px;line-height:1.8;color:var(--ink-mid);margin:11px 0 0;font-weight:500}
+
+  .sheet{
+    margin:15px 0 0;border-top:1px solid var(--pink-line);padding:2px 0 0
+  }
+  ol.ings{list-style:none;margin:0;padding:0}
+  ol.ings li{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--pink-line)}
+  ol.ings li:last-child{border-bottom:0}
+  .dot{
+    width:11px;height:11px;flex:0 0 auto;background:var(--c);
+    -webkit-mask:var(--heart) center/contain no-repeat;
+            mask:var(--heart) center/contain no-repeat
+  }
+  .ing{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who{
+    font-size:10.5px;font-weight:700;color:#fff;background:var(--pink);
+    border-radius:999px;padding:2.5px 9px;white-space:nowrap;flex:0 0 auto;
+    max-width:7em;overflow:hidden;text-overflow:ellipsis
+  }
+  .lead{flex:1 1 auto;min-width:10px}
+  .g{font-size:12.5px;font-weight:600;color:var(--ink-mid);flex:0 0 auto;font-variant-numeric:tabular-nums}
+  .total{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:9px;padding-top:10px;border-top:1.5px solid var(--pink-soft);
+    font-size:12.5px;font-weight:700;color:var(--pink-deep)
+  }
+  .total b{font-weight:800;font-size:15px;color:var(--ink)}
+
+  .save-row{display:flex;align-items:center;gap:9px;margin-top:15px;flex-wrap:wrap}
+  .save-row .lab{margin:0}
+  .acts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+  .acts .btn{flex:1 1 auto;padding:12px 12px;font-size:13.5px}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(14px);
+    background:var(--pink-deep);color:#fff;border:2.5px solid #fff;border-radius:999px;
+    padding:10px 22px;font-size:13.5px;font-weight:700;
+    box-shadow:0 10px 24px -10px rgba(255,111,165,.9);
+    opacity:0;pointer-events:none;
+    transition:opacity .24s ease, transform .24s cubic-bezier(.34,1.6,.5,1);z-index:9
+  }
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- motion ---------- */
+  @keyframes pop-in{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+  @keyframes stack{from{transform:translateY(14px) scaleY(.1);opacity:0}to{transform:none;opacity:1}}
+  @keyframes pop{from{transform:translateY(-12px) scale(.5);opacity:0}to{transform:none;opacity:1}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.75)}50%{opacity:1;transform:scale(1.12)}}
+  .an-layer{animation:stack .44s cubic-bezier(.2,.9,.3,1) backwards;transform-box:fill-box;transform-origin:50% 100%}
+  .an-pop{animation:pop .48s cubic-bezier(.34,1.8,.5,1) backwards;transform-box:fill-box;transform-origin:50% 100%}
+  .an-fade{animation:fade .55s ease backwards}
+  .sparkle{animation:twinkle 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 50%}
+  @media (prefers-reduced-motion:reduce){
+    .an-layer,.an-pop,.an-fade,.sparkle,.tag{animation:none}
+    .btn,.seg button,.tag__dot,.tag--add,.tag{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>파르페 <span>메이커</span></h1>
+    <p class="sub">PARFAIT MAKER</p>
+    <p class="desc">이름과 색을 정하면 어울리는 파르페를 만들어 드려요.<br>두 명 이상이면 한 잔에 같이 쌓입니다 ♡</p>
+  </header>
+
+  <section class="card">
+    <p class="lab">누구의 파르페인가요?</p>
+    <div class="tags" id="tags"></div>
+
+    <div class="divider"></div>
+
+    <div class="opt-row">
+      <p class="lab">잔 모양</p>
+      <div class="seg" id="segGlass"></div>
+    </div>
+    <div class="opt-row">
+      <p class="lab">크기</p>
+      <div class="seg" id="segSize"></div>
+    </div>
+
+    <button class="btn btn--go" id="make">파르페 만들기</button>
+  </section>
+
+  <section class="card" id="plate" aria-live="polite"></section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   1. 시드 난수 + 색 계산
+   ============================================================ */
+function hashStr(s){
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h >>> 0;
+}
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
+
+function hexToRgb(hex){
+  let h = String(hex).replace('#','').trim();
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) h = 'FF9EC1';
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
+function rgbToHsl(r,g,b){
+  r/=255; g/=255; b/=255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx - mn;
+  let h = 0, s = 0; const l = (mx + mn) / 2;
+  if (d){
+    s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+    if (mx === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (mx === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+  }
+  return [h, s * 100, l * 100];
+}
+function hslToHex(h,s,l){
+  h = ((h % 360) + 360) % 360; s = clamp(s,0,100)/100; l = clamp(l,0,100)/100;
+  const a = s * Math.min(l, 1 - l);
+  const k = n => (n + h/30) % 12;
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const t = x => Math.round(255 * x).toString(16).padStart(2,'0');
+  return '#' + t(f(0)) + t(f(8)) + t(f(4));
+}
+function mixHue(h1, h2, t){
+  const d = ((h2 - h1 + 540) % 360) - 180;
+  return (h1 + d * t + 360) % 360;
+}
+function shade(hex, amt){
+  const c = rgbToHsl.apply(null, hexToRgb(hex));
+  return hslToHex(c[0], c[1], clamp(c[2] + amt, 4, 97));
+}
+
+/* ============================================================
+   2. 팔레트 + 맛 이름
+   ============================================================ */
+function palette(hex){
+  const c = rgbToHsl.apply(null, hexToRgb(hex));
+  const h = c[0], s = Math.max(c[1], 16), l = clamp(c[2], 22, 84);
+  return {
+    h:h, s:s, l:l, s0:c[1], source:hex,
+    base:  hslToHex(h, clamp(s, 30, 88), clamp(l, 42, 68)),
+    light: hslToHex(h, clamp(s * .92, 32, 80), clamp(l + 16, 58, 82)),
+    pale:  hslToHex(h, clamp(s * .6, 20, 58), clamp(l + 30, 74, 90)),
+    cream: hslToHex(h, clamp(s * .38, 10, 34), 94),
+    deep:  hslToHex(h, clamp(s * 1.05, 34, 88), clamp(l - 18, 24, 46)),
+    wash:  hslToHex(h, clamp(s * .5, 16, 46), 96)
+  };
+}
+
+const FLAVOR_BANDS = [
+  [ 12, ['딸기','체리','사과','수박']],
+  [ 34, ['오렌지','살구','카라멜','복숭아']],
+  [ 52, ['망고','꿀','커스터드','패션후르츠']],
+  [ 70, ['레몬','파인애플','유자','바나나']],
+  [ 96, ['청사과','라임','키위','머스캣']],
+  [140, ['멜론','말차','피스타치오','녹차']],
+  [186, ['민트','소다','페퍼민트','애플민트']],
+  [216, ['블루큐라소','라무네','블루라군']],
+  [252, ['블루베리','블루라즈베리','아쿠아소다']],
+  [286, ['라벤더','포도','타로']],
+  [318, ['우베','블랙커런트','자두']],
+  [361, ['라즈베리','로즈','석류','벚꽃']]
+];
+function flavorName(pal, rng, used){
+  let list;
+  if (pal.s0 < 14) list = pal.l > 62 ? ['밀크','바닐라','코코넛'] : ['흑임자','쿠키','다크초코'];
+  else {
+    list = ['베리'];
+    for (let i = 0; i < FLAVOR_BANDS.length; i++){
+      if (pal.h < FLAVOR_BANDS[i][0]){ list = FLAVOR_BANDS[i][1]; break; }
+    }
+  }
+  let f = pick(rng, list);
+  if (used){
+    for (let i = 0; i < 8 && used.has(f); i++) f = pick(rng, list);
+    used.add(f);
+  }
+  return f;
+}
+
+/* ============================================================
+   3. 레시피
+   ============================================================ */
+const BOTTOM = ['granola','cornflake'];
+const MIDDLE = ['jelly','mousse','sponge','compote','pudding','sauce','soda','cream'];
+const TYPE_KO = {
+  granola:'그래놀라', cornflake:'콘플레이크', jelly:'젤리', mousse:'무스',
+  sponge:'스펀지케이크', compote:'콩포트', pudding:'푸딩', sauce:'소스',
+  soda:'소다젤리', cream:'크림'
+};
+const TYPE_WEIGHT = {
+  granola:.9, cornflake:.85, jelly:1, mousse:1.15, sponge:1,
+  compote:.8, pudding:1.1, sauce:.5, soda:1, cream:.9
+};
+function layerColor(type, p){
+  switch(type){
+    case 'granola':   return hslToHex(mixHue(p.h, 28, .78), 38, 42);
+    case 'cornflake': return hslToHex(mixHue(p.h, 38, .7), 52, 58);
+    case 'jelly':     return p.light;
+    case 'mousse':    return p.pale;
+    case 'sponge':    return hslToHex(mixHue(p.h, 40, .6), 34, 84);
+    case 'compote':   return p.base;
+    case 'pudding':   return hslToHex(mixHue(p.h, 42, .45), clamp(p.s * .7, 30, 62), 74);
+    case 'sauce':     return p.deep;
+    case 'soda':      return hslToHex(p.h, clamp(p.s * 1.1, 46, 88), clamp(p.l + 12, 56, 76));
+    default:          return p.cream;
+  }
+}
+function layerLabel(type, p, rng, used){
+  if (type === 'granola')   return '구운 그래놀라';
+  if (type === 'cornflake') return '콘플레이크';
+  let f = flavorName(p, rng, used);
+  if (TYPE_KO[type].indexOf(f) === 0) f = flavorName(p, rng, used);
+  return f + ' ' + TYPE_KO[type];
+}
+
+const TOPPINGS = ['cherry','star','heart','moon','macaron','flower','konpeito','ribbon',
+                  'crown','leaf','bear','pocky','berry','donut'];
+const TOPPING_KO = {
+  cherry:['마라스키노 체리',7], star:['별 쿠키',4], heart:['하트 초콜릿',5],
+  moon:['초승달 웨하스',3], macaron:['미니 마카롱',12], flower:['설탕 꽃',2],
+  konpeito:['별사탕',3], ribbon:['슈가 리본',4], crown:['왕관 쿠키',5],
+  leaf:['애플민트 잎',1], bear:['곰돌이 비스킷',6], pocky:['초코 스틱',8],
+  berry:['생딸기',13], donut:['미니 도넛',16]
+};
+
+const SIZES = {
+  S: { ko:'미니', ml:240, budget:148, bonus:-1 },
+  M: { ko:'보통', ml:320, budget:196, bonus:0 },
+  L: { ko:'라지', ml:420, budget:268, bonus:1 }
+};
+
+/* 받침에 맞는 을/를 */
+function josa(w){
+  if (!w) return '를';
+  const c = w.charCodeAt(w.length - 1);
+  if (c >= 0xAC00 && c <= 0xD7A3) return ((c - 0xAC00) % 28) ? '을' : '를';
+  return '를';
+}
+
+function buildRecipe(guests, salt, size){
+  const sz = SIZES[size] || SIZES.M;
+  const key = guests.map(g => g.name + '@' + g.color.toLowerCase()).join('|') + '::' + salt + '::' + size;
+  const rng = mulberry32(hashStr(key));
+  const pals = guests.map(g => palette(g.color));
+  const n = guests.length;
+  const used = new Set();
+
+  const count = clamp(4 + Math.floor(rng() * 2) + (n - 1) + sz.bonus, 3, 8);
+  const types = [pick(rng, BOTTOM)];
+  let pool = MIDDLE.slice();
+  for (let i = 1; i < count; i++){
+    const avail = pool.filter(t => t !== types[types.length - 1]);
+    const t = pick(rng, avail);
+    types.push(t);
+    if (pool.length > 4) pool = pool.filter(x => x !== t);
+  }
+  if (['sauce','granola','cornflake'].indexOf(types[types.length - 1]) > -1){
+    types[types.length - 1] = pick(rng, ['mousse','cream','jelly']);
+  }
+
+  const offset = Math.floor(rng() * n);
+  const layers = types.map(function(type, i){
+    const gi = (i + offset) % n;
+    return {
+      type:type, gi:gi, who:guests[gi].name,
+      color: layerColor(type, pals[gi]),
+      label: layerLabel(type, pals[gi], rng, used),
+      weight: TYPE_WEIGHT[type] * (0.85 + rng() * 0.35)
+    };
+  });
+
+  const budget = sz.budget + (n - 1) * 34;
+  const wsum = layers.reduce((a,l) => a + l.weight, 0);
+  layers.forEach(l => { l.g = Math.max(8, Math.round(l.weight / wsum * budget)); });
+
+  const scoopG = Math.round(sz.budget * 0.21);
+  const scoops = [0,1].map(function(i){
+    const gi = (offset + i) % n;
+    return {
+      color: pals[gi].base, who: guests[gi].name,
+      label: flavorName(pals[gi], rng, used) + ' 아이스크림',
+      g: scoopG + Math.round(rng() * 5)
+    };
+  });
+  if (n === 1) scoops[1].label = scoops[0].label;
+
+  let ch = pals[0].h, cs = pals[0].s;
+  for (let i = 1; i < n; i++){ ch = mixHue(ch, pals[i].h, 1 / (i + 1)); cs += pals[i].s; }
+  cs /= n;
+  const cream = {
+    color: hslToHex(ch, clamp(cs * .28, 8, 24), 95),
+    shade: hslToHex(ch, clamp(cs * .4, 10, 36), 85),
+    wash:  hslToHex(ch, clamp(cs * .5, 14, 44), 96),
+    label: n > 1 ? '섞은 생크림' : '생크림',
+    who: n > 1 ? guests.map(g => g.name).join(' + ') : guests[0].name,
+    g: Math.round(sz.budget * 0.13) + Math.round(rng() * 5)
+  };
+
+  const takenTop = {};
+  const toppings = guests.map(function(g, i){
+    let idx = hashStr(g.name + '#top') % TOPPINGS.length;
+    for (let t = 0; t < TOPPINGS.length && takenTop[TOPPINGS[idx]]; t++) idx = (idx + 1) % TOPPINGS.length;
+    const k = TOPPINGS[idx];
+    takenTop[k] = 1;
+    return { kind:k, color:pals[i].base, deep:pals[i].deep, who:g.name,
+             label:TOPPING_KO[k][0], g:TOPPING_KO[k][1] };
+  });
+  const sprinkles = { color: pals[0].deep, who: cream.who, label:'레인보우 스프링클', g:2 };
+
+  const title = n === 1 ? guests[0].name + '의 파르페' : guests.map(g => g.name).join(' × ') + ' 파르페';
+
+  const seen = {};
+  const mid = layers.slice(1,-1).map(l => l.label)
+    .filter(x => { if (seen[x]) return false; seen[x] = 1; return true; }).slice(0,2);
+  const topText = toppings.map(t => t.label).join(', ');
+  const note = '맨 아래 ' + layers[0].label +
+    (mid.length ? ', 가운데 ' + mid.join(', ') : '') +
+    ', 맨 위 ' + cream.label + '. 토핑으로 ' + topText + josa(topText) + ' 올렸어요.';
+
+  return { layers, scoops, cream, toppings, sprinkles, title, note,
+           palettes: pals, guests, salt, size:size, sizeInfo: sz };
+}
+
+/* ============================================================
+   4. 잔 모양 + 그리기
+   ============================================================ */
+const VW = 320, VH = 470;
+const GLASSES = {
+  tall: {
+    ko:'긴 잔',
+    bowl:'M74,178 C76,254 90,326 112,364 Q160,382 208,364 C230,326 244,254 246,178 Z',
+    rim:178, bottom:368, halfW:86,
+    rimArc:'M74,178 a86,13 0 0 0 172,0',
+    stem:'M146,364 C145,376 145,386 144,394 L176,394 C175,386 175,376 174,364 Z',
+    foot:'M116,396 Q160,387 204,396 Q207,414 160,421 Q113,414 116,396 Z',
+    footEl:[160,396,44,8], shadow:[160,426,64,8],
+    bow:[160,392,.62],
+    hi1:'M90,194 C93,262 106,322 120,356', hi2:'M230,202 C228,248 222,290 214,320'
+  },
+  cup: {
+    ko:'컵',
+    bowl:'M78,162 C80,254 88,344 102,386 Q160,406 218,386 C232,344 240,254 242,162 Z',
+    rim:162, bottom:390, halfW:82,
+    rimArc:'M78,162 a82,12 0 0 0 164,0',
+    stem:null,
+    foot:'M100,392 Q160,412 220,392 Q221,422 160,429 Q99,422 100,392 Z',
+    footEl:null, shadow:[160,433,68,8],
+    bow:[160,412,.56],
+    hi1:'M92,176 C94,254 103,326 113,372', hi2:'M228,184 C227,234 221,286 213,332'
+  },
+  bowl: {
+    ko:'볼',
+    bowl:'M54,208 C58,264 88,312 114,326 Q160,340 206,326 C232,312 262,264 266,208 Z',
+    rim:208, bottom:328, halfW:106,
+    rimArc:'M54,208 a106,14 0 0 0 212,0',
+    stem:'M145,326 C144,342 144,356 143,368 L177,368 C176,356 176,342 175,326 Z',
+    foot:'M112,370 Q160,361 208,370 Q211,388 160,396 Q109,388 112,370 Z',
+    footEl:[160,370,48,8], shadow:[160,400,70,8],
+    bow:[160,366,.58],
+    hi1:'M72,222 C78,262 98,296 116,312', hi2:'M250,228 C246,256 232,282 214,300'
+  }
+};
+
+function wavy(yTop, yBottom, amp, freq, phase){
+  let d = 'M-6,' + yBottom.toFixed(1) + ' L-6,' + yTop.toFixed(1);
+  for (let x = -6; x <= 326; x += 8){
+    d += ' L' + x + ',' + (yTop + Math.sin((x / 320) * Math.PI * 2 * freq + phase) * amp).toFixed(1);
+  }
+  return d + ' L326,' + yBottom.toFixed(1) + ' Z';
+}
+
+function texture(type, top, bottom, color, rng){
+  const dark = shade(color, -16), lite = shade(color, 22);
+  const mid = (top + bottom) / 2;
+  const yIn = () => top + 6 + rng() * Math.max(2, bottom - top - 12);
+  const xIn = () => 86 + rng() * 150;
+  const n = Math.max(3, Math.round((bottom - top) / 9));
+  let s = '';
+  if (type === 'granola' || type === 'cornflake'){
+    for (let i = 0; i < n * 2; i++){
+      const w = 7 + rng()*8, h = 4 + rng()*4;
+      s += '<rect x="' + (xIn()-w/2).toFixed(1) + '" y="' + yIn().toFixed(1) + '" width="' + w.toFixed(1) +
+           '" height="' + h.toFixed(1) + '" rx="2" fill="' + (rng()>.5?dark:lite) +
+           '" fill-opacity="0.72" transform="rotate(' + (rng()*60-30).toFixed(0) + ' 160 ' + mid.toFixed(0) + ')"/>';
+    }
+  } else if (type === 'jelly'){
+    for (let i = 0; i < n; i++){
+      const w = 9 + rng()*7, x = xIn(), y = yIn();
+      s += '<rect x="' + (x-w/2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + w.toFixed(1) +
+           '" rx="3" fill="' + lite + '" fill-opacity="0.5" transform="rotate(' + (rng()*40-20).toFixed(0) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+    }
+  } else if (type === 'compote'){
+    for (let i = 0; i < n; i++){
+      const r = 4.5 + rng()*3.5, x = xIn(), y = yIn();
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + dark + '" fill-opacity="0.55"/>' +
+           '<circle cx="' + (x-r*.32).toFixed(1) + '" cy="' + (y-r*.36).toFixed(1) + '" r="' + (r*.3).toFixed(1) + '" fill="#fff" fill-opacity="0.55"/>';
+    }
+  } else if (type === 'mousse' || type === 'pudding'){
+    for (let i = 0; i < n; i++){
+      s += '<circle cx="' + xIn().toFixed(1) + '" cy="' + yIn().toFixed(1) + '" r="' + (2+rng()*3).toFixed(1) + '" fill="#fff" fill-opacity="0.36"/>';
+    }
+  } else if (type === 'sponge'){
+    for (let i = 0; i < n; i++){
+      const w = 12+rng()*8, h = 8+rng()*5;
+      s += '<rect x="' + (xIn()-w/2).toFixed(1) + '" y="' + yIn().toFixed(1) + '" width="' + w.toFixed(1) +
+           '" height="' + h.toFixed(1) + '" rx="2.5" fill="' + dark + '" fill-opacity="0.26"/>';
+    }
+  } else if (type === 'soda'){
+    for (let i = 0; i < n+4; i++){
+      s += '<circle cx="' + xIn().toFixed(1) + '" cy="' + yIn().toFixed(1) + '" r="' + (1.6+rng()*3.4).toFixed(1) +
+           '" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.2"/>';
+    }
+  } else if (type === 'sauce'){
+    s += '<path d="M64,' + (top+4).toFixed(1) + ' Q160,' + (top+13).toFixed(1) + ' 256,' + (top+3).toFixed(1) +
+         '" stroke="#fff" stroke-opacity="0.3" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  } else if (type === 'cream'){
+    for (let i = 0; i < 3; i++){
+      s += '<path d="M' + (74+i*8) + ',' + (top+8+i*7).toFixed(1) + ' q40,' + (6-i*3) + ' 86,0" stroke="' + dark +
+           '" stroke-opacity="0.2" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+    }
+  }
+  return s;
+}
+
+function topping(kind, x, y, c, deep, sc){
+  const g = i => '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + sc + ')">' + i + '</g>';
+  const glint = '<circle cx="-3" cy="-4" r="2.4" fill="#fff" fill-opacity="0.6"/>';
+  switch(kind){
+    case 'cherry':
+      return g('<path d="M1,-3 C3,-16 9,-22 15,-25" stroke="#8A6A4A" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+               '<path d="M15,-25 q9,-3 12,3 q-9,4 -12,-3z" fill="#8FC7A8"/><circle cx="0" cy="0" r="9" fill="' + c + '"/>' + glint);
+    case 'star':
+      return g('<path d="M0,-12 L3.6,-4 L12,-3.4 L5.6,2.2 L7.6,10.6 L0,6.2 L-7.6,10.6 L-5.6,2.2 L-12,-3.4 L-3.6,-4 Z" fill="' + c +
+               '" stroke="' + deep + '" stroke-width="1.1" stroke-linejoin="round"/>' + glint);
+    case 'heart':
+      return g('<path d="M0,10 C-13,1 -11,-9 -5,-9 C-2,-9 0,-6.5 0,-4.5 C0,-6.5 2,-9 5,-9 C11,-9 13,1 0,10 Z" fill="' + c +
+               '" stroke="' + deep + '" stroke-width="1" stroke-linejoin="round"/>' + glint);
+    case 'moon':
+      return g('<path d="M4,-11 A11,11 0 1 0 4,11 A8.6,8.6 0 1 1 4,-11 Z" fill="' + c + '" stroke="' + deep + '" stroke-width="1"/>');
+    case 'macaron':
+      return g('<path d="M-11,-1 a11,8.5 0 0 1 22,0 z" fill="' + c + '"/>' +
+               '<rect x="-11" y="-1.8" width="22" height="3.6" rx="1.4" fill="#FFF6E9"/>' +
+               '<path d="M-11,2 a11,8.5 0 0 0 22,0 z" fill="' + shade(c,-9) + '"/>');
+    case 'flower':
+      return g([0,1,2,3,4].map(i => '<ellipse cx="0" cy="-7.5" rx="4.4" ry="6.4" fill="' + c + '" transform="rotate(' + (i*72) + ')"/>').join('') +
+               '<circle cx="0" cy="0" r="3.6" fill="#FFF6E9"/>');
+    case 'konpeito':
+      return g('<path d="M0,-10 L3,-3 L10,0 L3,3 L0,10 L-3,3 L-10,0 L-3,-3 Z" fill="' + c + '" fill-opacity="0.92"/>' +
+               '<path d="M7,-7 L3.5,-1.5 L7,7 L0,3.5 L-7,7 L-3.5,0 L-7,-7 L0,-3.5 Z" fill="' + shade(c,18) + '" fill-opacity="0.85"/>');
+    case 'ribbon':
+      return g('<path d="M-2,0 L-14,-7 L-14,7 Z" fill="' + c + '"/><path d="M2,0 L14,-7 L14,7 Z" fill="' + c + '"/>' +
+               '<circle cx="0" cy="0" r="3.6" fill="' + shade(c,-12) + '"/>');
+    case 'crown':
+      return g('<path d="M-12,7 L-12,-8 L-6,-1 L0,-10 L6,-1 L12,-8 L12,7 Z" fill="' + c + '" stroke="' + deep +
+               '" stroke-width="1" stroke-linejoin="round"/><circle cx="0" cy="2" r="2" fill="#FFF6E9"/>');
+    case 'bear':
+      return g('<circle cx="-7.5" cy="-8" r="4.4" fill="' + shade(c,-8) + '"/><circle cx="7.5" cy="-8" r="4.4" fill="' + shade(c,-8) + '"/>' +
+               '<circle cx="0" cy="0" r="10.5" fill="' + c + '"/>' +
+               '<circle cx="-3.6" cy="-1.6" r="1.5" fill="' + deep + '"/><circle cx="3.6" cy="-1.6" r="1.5" fill="' + deep + '"/>' +
+               '<ellipse cx="0" cy="3.4" rx="4.6" ry="3.4" fill="#FFF6E9" fill-opacity="0.8"/>' +
+               '<circle cx="0" cy="2.4" r="1.5" fill="' + deep + '"/>');
+    case 'pocky':
+      return g('<g transform="rotate(20)"><rect x="-2.6" y="-2" width="5.2" height="26" rx="2.4" fill="#F2DFC4"/>' +
+               '<rect x="-2.6" y="-20" width="5.2" height="20" rx="2.4" fill="' + c + '"/>' +
+               '<rect x="-1.2" y="-18" width="1.6" height="15" rx=".8" fill="#fff" fill-opacity="0.35"/></g>');
+    case 'berry':
+      return g('<path d="M0,12 C-9,6 -11,-3 -6,-7 C-3,-9.4 3,-9.4 6,-7 C11,-3 9,6 0,12 Z" fill="' + c + '"/>' +
+               '<path d="M-7,-7 q3.5,-2.6 7,-2.6 q3.5,0 7,2.6 q-3.5,2.2 -7,2.2 q-3.5,0 -7,-2.2 z" fill="#8FC7A8"/>' +
+               '<path d="M0,-11.5 L0,-8" stroke="#8FC7A8" stroke-width="2" stroke-linecap="round"/>' +
+               '<circle cx="-3" cy="1" r="1" fill="#fff" fill-opacity="0.75"/><circle cx="3" cy="3" r="1" fill="#fff" fill-opacity="0.75"/>' +
+               '<circle cx="0" cy="6.5" r="1" fill="#fff" fill-opacity="0.75"/>');
+    case 'donut':
+      return g('<circle cx="0" cy="0" r="11" fill="#E8C79B"/>' +
+               '<path d="M-11,-1 a11,11 0 0 1 22,0 a11,10 0 0 1 -22,0 z" fill="' + c + '"/>' +
+               '<path d="M-9.6,2.4 q3,4 5.6,0 q3,4 6,0 q2.6,4 6,0.4" stroke="' + c + '" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
+               '<circle cx="0" cy="0" r="3.8" fill="#FFF6E9"/>' +
+               '<rect x="-6" y="-6" width="4" height="1.8" rx=".9" fill="#fff" fill-opacity="0.8" transform="rotate(-24 -6 -6)"/>' +
+               '<rect x="3" y="-4" width="4" height="1.8" rx=".9" fill="#fff" fill-opacity="0.8" transform="rotate(30 3 -4)"/>');
+    default:
+      return g('<path d="M0,9 C-11,3 -11,-8 0,-11 C11,-8 11,3 0,9 Z" fill="' + c + '"/>' +
+               '<path d="M0,8 L0,-9" stroke="#FFF6E9" stroke-opacity="0.65" stroke-width="1.2" stroke-linecap="round"/>');
+  }
+}
+
+/* 줄무늬 빨대 */
+function straw(rim, c){
+  const top = -128, len = 150;
+  let st = '<g transform="translate(232,' + (rim - 22) + ') rotate(15)">' +
+    '<rect x="-6.5" y="' + top + '" width="13" height="' + len + '" rx="6.5" fill="#FFF6FA"/>';
+  for (let i = 0; i < 7; i++){
+    st += '<rect x="-6.5" y="' + (top + 6 + i * 19) + '" width="13" height="9" fill="' + c + '" fill-opacity="0.85"/>';
+  }
+  st += '<rect x="-6.5" y="' + top + '" width="13" height="' + len + '" rx="6.5" fill="none" stroke="#5E4450" stroke-opacity="0.14" stroke-width="2"/>' +
+        '<rect x="-4" y="' + (top + 8) + '" width="2.6" height="40" rx="1.3" fill="#fff" fill-opacity="0.55"/></g>';
+  return st;
+}
+/* 잔에 매는 작은 리본 */
+function glassBow(x, y, sc, c, deep){
+  return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
+    '<path d="M-5,0 L-24,-12 C-28,-14 -30,-8 -29,-2 C-28,4 -26,9 -22,12 C-18,15 -11,10 -5,4 Z" fill="' + c + '" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>' +
+    '<path d="M5,0 L24,-12 C28,-14 30,-8 29,-2 C28,4 26,9 22,12 C18,15 11,10 5,4 Z" fill="' + c + '" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>' +
+    '<circle cx="0" cy="1" r="6.4" fill="' + deep + '" fill-opacity="0.75" stroke="#fff" stroke-width="2.6"/></g>';
+}
+
+function sparkle(x, y, s, c, delay){
+  return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">' +
+    '<path class="sparkle" style="animation-delay:' + delay + 'ms" fill="' + c +
+    '" d="M0,-10 C1,-3 3,-1 10,0 C3,1 1,3 0,10 C-1,3 -3,1 -10,0 C-3,-1 -1,-3 0,-10 Z"/></g>';
+}
+function heartAt(x, y, s, c, op){
+  return '<path transform="translate(' + x + ',' + y + ') scale(' + s + ')" fill="' + c + '" fill-opacity="' + op +
+    '" d="M0,7 C-9,1 -8,-7 -3.4,-7 C-1.3,-7 0,-5 0,-3.5 C0,-5 1.3,-7 3.4,-7 C8,-7 9,1 0,7 Z"/>';
+}
+
+function buildSVG(r, animate, gk){
+  const G = GLASSES[gk] || GLASSES.tall;
+  const uid = 'u' + Math.floor(Math.random() * 1e6);
+  const rng = mulberry32(hashStr(r.title + r.note + r.salt + gk));
+  const RIM = G.rim, BOT = G.bottom;
+  let o = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + VW + ' ' + VH + '" role="img" aria-label="' + esc(r.title) + '">';
+
+  o += '<defs><clipPath id="' + uid + 'b"><path d="' + G.bowl + '"/></clipPath>' +
+       '<linearGradient id="' + uid + 'g" x1="0" y1="0" x2="1" y2="0">' +
+       '<stop offset="0" stop-color="#fff" stop-opacity="0.4"/><stop offset="0.35" stop-color="#fff" stop-opacity="0.05"/>' +
+       '<stop offset="0.74" stop-color="#fff" stop-opacity="0.02"/><stop offset="1" stop-color="#fff" stop-opacity="0.28"/></linearGradient>' +
+       '<radialGradient id="' + uid + 'c" cx="0.34" cy="0.26" r="0.95">' +
+       '<stop offset="0" stop-color="' + r.cream.color + '"/><stop offset="1" stop-color="' + r.cream.shade + '"/></radialGradient></defs>';
+
+  const cy = (RIM + BOT) / 2 + 40;
+  o += '<circle cx="160" cy="' + cy + '" r="152" fill="' + r.cream.wash + '"/>';
+  o += sparkle(52, cy - 22, 1.0, r.palettes[0].light, 0) +
+       sparkle(272, cy + 28, 0.8, r.palettes[r.palettes.length-1].light, 900) +
+       sparkle(266, cy - 74, 0.6, r.palettes[0].light, 1700);
+  o += '<ellipse cx="' + G.shadow[0] + '" cy="' + G.shadow[1] + '" rx="' + G.shadow[2] + '" ry="' + G.shadow[3] + '" fill="#5E4450" fill-opacity="0.09"/>';
+
+  const total = r.layers.reduce((a,l) => a + l.weight, 0);
+  const span = BOT - RIM;
+  let cur = BOT;
+  const bands = r.layers.map(function(l, i){
+    const h = (l.weight / total) * span;
+    const top = (i === r.layers.length - 1) ? RIM : cur - h;
+    const b = { l:l, top:top, bottom:cur };
+    cur = top;
+    return b;
+  });
+
+  o += '<g clip-path="url(#' + uid + 'b)">';
+  bands.forEach(function(b, i){
+    const cls = animate ? ' class="an-layer" style="animation-delay:' + (i*100) + 'ms"' : '';
+    o += '<g' + cls + '><path d="' + wavy(b.top, b.bottom + 6, i === bands.length-1 ? 3 : 4.5, 1.4 + rng(), rng()*6.28) +
+         '" fill="' + b.l.color + '"/><g clip-path="url(#' + uid + 'b)">' + texture(b.l.type, b.top, b.bottom, b.l.color, rng) + '</g></g>';
+  });
+  o += '<path d="' + G.bowl + '" fill="url(#' + uid + 'g)"/></g>';
+
+  const d0 = animate ? r.layers.length * 100 : 0;
+
+  o += (animate ? '<g class="an-fade" style="animation-delay:' + (d0 + 40) + 'ms">' : '<g>') +
+       straw(RIM, r.palettes[r.palettes.length - 1].light) + '</g>';
+
+  const sx = G.halfW - 10;
+  r.scoops.forEach(function(s, i){
+    const x = 160 + (i - .5) * sx * 2;
+    const cls = animate ? ' class="an-pop" style="animation-delay:' + (d0 + 60 + i*90) + 'ms"' : '';
+    o += '<g' + cls + '><circle cx="' + x.toFixed(1) + '" cy="' + (RIM - 28) + '" r="40" fill="' + s.color + '"/>' +
+         '<path d="M' + (x-40).toFixed(1) + ',' + (RIM-28) + ' a40,40 0 0 1 80,0 z" fill="#fff" fill-opacity="0.15"/>' +
+         '<circle cx="' + (x-13).toFixed(1) + '" cy="' + (RIM-42) + '" r="9" fill="#fff" fill-opacity="0.32"/></g>';
+  });
+
+  const dc = d0 + 180;
+  let cw = animate ? '<g class="an-pop" style="animation-delay:' + dc + 'ms">' : '<g>';
+  [[57,19,0],[50,17,5],[42,15,-5],[33,13,4],[24,11,-3],[15,8,1]].forEach(function(t, i){
+    const y = RIM - 4 - i*17;
+    cw += '<ellipse cx="' + (160+t[2]) + '" cy="' + y + '" rx="' + t[0] + '" ry="' + t[1] + '" fill="url(#' + uid + 'c)"/>' +
+          '<path d="M' + (160+t[2]-t[0]*.9) + ',' + (y+t[1]*.34).toFixed(1) + ' a' + t[0] + ',' + t[1] + ' 0 0 0 ' + (t[0]*1.8) +
+          ',0" fill="none" stroke="' + r.cream.shade + '" stroke-opacity="0.38" stroke-width="1.6" stroke-linecap="round"/>';
+  });
+  cw += '<path d="M161,' + (RIM-101) + ' C173,' + (RIM-108) + ' 172,' + (RIM-118) + ' 163,' + (RIM-123) +
+        ' C155,' + (RIM-116) + ' 153,' + (RIM-108) + ' 153,' + (RIM-100) + ' Z" fill="url(#' + uid + 'c)"/></g>';
+  o += cw;
+
+  let sp = animate ? '<g class="an-fade" style="animation-delay:' + (dc+200) + 'ms">' : '<g>';
+  for (let i = 0; i < 15; i++){
+    const a = rng()*Math.PI*2, rad = rng()*44;
+    const x = 160 + Math.cos(a)*rad, y = RIM - 34 - Math.abs(Math.sin(a))*24 - rng()*28;
+    sp += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="5.5" height="2.4" rx="1.2" fill="' +
+          r.palettes[i % r.palettes.length].deep + '" fill-opacity="0.85" transform="rotate(' + (rng()*180).toFixed(0) +
+          ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+  }
+  o += sp + '</g>';
+
+  const SLOTS = [[160, RIM-134, 1.25],[160-58, RIM-70, .95],[160+58, RIM-70, .95],[160-34, RIM-112, .85],[160+34, RIM-112, .85]];
+  r.toppings.forEach(function(t, i){
+    const s = SLOTS[i % SLOTS.length];
+    const cls = animate ? ' class="an-pop" style="animation-delay:' + (dc + 250 + i*110) + 'ms"' : '';
+    o += '<g' + cls + '>' + topping(t.kind, s[0], s[1], t.color, t.deep, s[2]) + '</g>';
+  });
+
+  const gc = animate ? ' class="an-fade"' : '';
+  o += '<g' + gc + '>';
+  if (G.stem) o += '<path d="' + G.stem + '" fill="#fff" fill-opacity="0.4"/>';
+  o += '<path d="' + G.foot + '" fill="#fff" fill-opacity="0.46"/>';
+  if (G.footEl) o += '<ellipse cx="' + G.footEl[0] + '" cy="' + G.footEl[1] + '" rx="' + G.footEl[2] + '" ry="' + G.footEl[3] + '" fill="#fff" fill-opacity="0.36"/>';
+  o += '<g fill="none" stroke="#5E4450" stroke-opacity="0.19" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">' +
+       '<path d="' + G.bowl + '"/><path d="' + G.rimArc + '" stroke-opacity="0.14"/>' +
+       (G.stem ? '<path d="' + G.stem + '"/>' : '') + '<path d="' + G.foot + '"/></g>';
+  if (G.bow) o += glassBow(G.bow[0], G.bow[1], G.bow[2], r.palettes[0].light, r.palettes[0].base);
+  o += '<path d="' + G.hi1 + '" stroke="#fff" stroke-opacity="0.62" stroke-width="5" fill="none" stroke-linecap="round"/>';
+  o += '<path d="' + G.hi2 + '" stroke="#fff" stroke-opacity="0.32" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+  o += '</g></svg>';
+  return o;
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ============================================================
+   5. 화면
+   ============================================================ */
+const SEEDS = ['#FF9EC1','#7CC6F5','#8ED396','#F5C15C','#B79BE8','#F58A6E'];
+let guests = [{ name:'', color:'#FF9EC1' }];
+let glassKey = 'tall', sizeKey = 'M', salt = 0, saveMode = 'card';
+let current = null;
+
+const $tags = document.getElementById('tags');
+const $plate = document.getElementById('plate');
+const $toast = document.getElementById('toast');
+
+function toast(msg){
+  $toast.textContent = msg;
+  $toast.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function(){ $toast.classList.remove('on'); }, 1900);
+}
+
+function renderTags(){
+  $tags.innerHTML = guests.map(function(g, i){
+    const w = Math.max(3, Math.min(14, (g.name || '이름').length + 1));
+    return '<span class="tag" style="--c:' + esc(g.color) + '">' +
+      '<span class="tag__dot"><input type="color" data-i="' + i + '" data-f="color" value="' + esc(g.color) +
+      '" aria-label="' + (i+1) + '번 색상"></span>' +
+      '<input type="text" data-i="' + i + '" data-f="name" value="' + esc(g.name) +
+      '" placeholder="이름" maxlength="14" size="' + w + '" aria-label="' + (i+1) + '번 이름">' +
+      (guests.length > 1 ? '<button class="tag__x" data-drop="' + i + '" aria-label="' + (i+1) + '번 빼기">✕</button>'
+                         : '<span style="width:4px"></span>') +
+    '</span>';
+  }).join('') +
+  '<button class="tag--add" id="add"' + (guests.length >= 4 ? ' disabled' : '') + '>+ 추가</button>';
+}
+$tags.addEventListener('input', function(e){
+  const t = e.target;
+  if (!t.dataset.f) return;
+  guests[+t.dataset.i][t.dataset.f] = t.value;
+  if (t.dataset.f === 'color') t.closest('.tag').style.setProperty('--c', t.value);
+  else t.size = Math.max(3, Math.min(14, t.value.length + 1));
+});
+$tags.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && e.target.type === 'text'){ e.preventDefault(); serve(true); }
+});
+$tags.addEventListener('click', function(e){
+  if (e.target.closest('#add')){
+    if (guests.length >= 4) return;
+    guests.push({ name:'', color: SEEDS[guests.length % SEEDS.length] });
+    renderTags();
+    const t = $tags.querySelectorAll('input[type=text]');
+    t[t.length-1].focus();
+    return;
+  }
+  const b = e.target.closest('[data-drop]');
+  if (b){ guests.splice(+b.dataset.drop, 1); renderTags(); }
+});
+
+function renderSeg(el, items, active, onPick){
+  el.innerHTML = items.map(function(it){
+    return '<button data-k="' + it[0] + '" aria-pressed="' + (it[0] === active()) + '">' + it[1] + '</button>';
+  }).join('');
+  el.onclick = function(e){
+    const b = e.target.closest('button[data-k]');
+    if (!b) return;
+    onPick(b.dataset.k);
+    renderSeg(el, items, active, onPick);
+  };
+}
+const $segGlass = document.getElementById('segGlass');
+const $segSize = document.getElementById('segSize');
+function paintSegs(){
+  renderSeg($segGlass, Object.keys(GLASSES).map(k => [k, GLASSES[k].ko]),
+    () => glassKey, function(k){ glassKey = k; if (current) render(false); });
+  renderSeg($segSize, Object.keys(SIZES).map(k => [k, SIZES[k].ko]),
+    () => sizeKey, function(k){ sizeKey = k; if (current) serve(false); });
+}
+document.getElementById('make').addEventListener('click', function(){ serve(true); });
+
+function emptyState(){
+  $plate.innerHTML =
+    '<div class="empty">' +
+      '<svg viewBox="0 0 320 470" aria-hidden="true">' +
+        '<circle cx="160" cy="274" r="150" fill="#FFF3F8"/>' +
+        '<path d="' + GLASSES.tall.bowl + '" fill="#FFE4EE"/>' +
+        '<path d="' + GLASSES.tall.stem + '" fill="#FFE4EE"/>' +
+        '<path d="' + GLASSES.tall.foot + '" fill="#FFE4EE"/>' +
+        '<ellipse cx="160" cy="160" rx="48" ry="17" fill="#FFD3E4"/>' +
+        '<ellipse cx="160" cy="137" rx="35" ry="13" fill="#FFE4EE"/>' +
+        '<ellipse cx="160" cy="118" rx="22" ry="10" fill="#FFD3E4"/>' +
+        heartAt(160, 90, 2.2, '#FFC2DA', .95) +
+        '<g transform="translate(160,392) scale(.62)">' +
+          '<path d="M-6,0 L-26,-13 L-26,13 Z" fill="#FFC2DA"/>' +
+          '<path d="M6,0 L26,-13 L26,13 Z" fill="#FFC2DA"/>' +
+          '<circle cx="0" cy="0" r="6.5" fill="#FFAECE"/>' +
+        '</g>' +
+      '</svg>' +
+      '<p>이름과 색을 정하고<br>파르페 만들기를 눌러 보세요 ♡</p>' +
+      '<p class="hint">이름은 아무거나 괜찮아요</p>' +
+    '</div>';
+}
+
+function serve(reseed){
+  if (reseed) salt = 0;
+  current = buildRecipe(guests.map(function(g, i){
+    return { name: (g.name || '').trim() || ('손님 ' + (i+1)), color: g.color };
+  }), salt, sizeKey);
+  render(true);
+}
+
+function render(animate){
+  const r = current;
+  const rows = []
+    .concat(r.toppings.map(t => ({ c:t.color, n:t.label, w:t.who, g:t.g })))
+    .concat([{ c:r.sprinkles.color, n:r.sprinkles.label, w:r.sprinkles.who, g:r.sprinkles.g }])
+    .concat([{ c:r.cream.shade, n:r.cream.label, w:r.cream.who, g:r.cream.g }])
+    .concat(r.scoops
+      .filter((s,i,a) => a.findIndex(o => o.label === s.label && o.color === s.color) === i)
+      .map(s => ({ c:s.color, n:s.label, w:s.who, g: s.g * (r.guests.length === 1 ? 2 : 1) })))
+    .concat(r.layers.slice().reverse().map(l => ({ c:l.color, n:l.label, w:l.who, g:l.g })));
+
+  const net = rows.reduce((a,x) => a + x.g, 0);
+  const many = r.guests.length > 1;
+  r.net = net;
+
+  $plate.innerHTML =
+    '<div class="result">' +
+      '<div class="stage" id="stage">' + buildSVG(r, animate, glassKey) + '</div>' +
+      '<div class="recipe">' +
+        '<h2>' + esc(r.title) + '</h2>' +
+        '<p class="meta">' + r.guests.length + '인분 · ' + GLASSES[glassKey].ko + ' ' + r.sizeInfo.ml + 'ml · ' + r.layers.length + '층</p>' +
+        '<p class="note">' + esc(r.note) + '</p>' +
+        '<div class="sheet"><ol class="ings">' +
+          rows.map(function(x){
+            return '<li><span class="dot" style="--c:' + esc(x.c) + '"></span>' +
+              '<span class="ing">' + esc(x.n) + '</span>' +
+              (many ? '<span class="who">' + esc(x.w) + '</span>' : '') +
+              '<span class="lead"></span><span class="g">' + x.g + ' g</span></li>';
+          }).join('') +
+        '</ol><div class="total"><span>총 중량</span><b>' + net + ' g</b></div></div>' +
+        '<div class="save-row"><p class="lab">저장 형식</p><div class="seg" id="segSave"></div></div>' +
+        '<div class="acts">' +
+          '<button class="btn btn--soft" id="save">이미지 저장</button>' +
+          '<button class="btn btn--line" id="shuffle">다시 섞기</button>' +
+          '<button class="btn btn--line" id="link">링크 복사</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  renderSeg(document.getElementById('segSave'),
+    [['card','카드'],['square','정사각'],['glass','잔만']],
+    () => saveMode, function(k){ saveMode = k; });
+
+  document.getElementById('shuffle').addEventListener('click', function(){ salt++; serve(false); });
+  document.getElementById('save').addEventListener('click', savePNG);
+  document.getElementById('link').addEventListener('click', copyLink);
+  writeHash();
+}
+
+/* ---------- 공유 링크 ---------- */
+function writeHash(){
+  const g = guests.map(x => encodeURIComponent(x.name) + '~' + x.color.replace('#','')).join('!');
+  history.replaceState(null, '', location.pathname + location.search +
+    '#g=' + g + '&v=' + glassKey + '&z=' + sizeKey + '&s=' + salt);
+}
+function readHash(){
+  const h = location.hash.slice(1);
+  if (!h) return false;
+  const q = {};
+  h.split('&').forEach(function(p){ const i = p.indexOf('='); if (i > 0) q[p.slice(0,i)] = p.slice(i+1); });
+  if (!q.g) return false;
+  const list = q.g.split('!').map(function(p){
+    const bits = p.split('~');
+    return { name: decodeURIComponent(bits[0] || '').slice(0,14), color: '#' + (bits[1] || 'FF9EC1').slice(0,6) };
+  }).slice(0,4);
+  if (!list.length) return false;
+  guests = list;
+  if (GLASSES[q.v]) glassKey = q.v;
+  if (SIZES[q.z]) sizeKey = q.z;
+  salt = parseInt(q.s, 10) || 0;
+  return true;
+}
+function copyLink(){
+  writeHash();
+  const url = location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){ toast('링크를 복사했어요'); },
+                                            function(){ toast('주소창의 링크를 복사해 주세요'); });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = url; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('링크를 복사했어요'); }
+    catch(e){ toast('주소창의 링크를 복사해 주세요'); }
+    document.body.removeChild(ta);
+  }
+}
+
+/* ---------- 이미지 저장 ---------- */
+const SAVE_LAYOUT = {
+  card:   { w:320, h:580, gx:0,  gy:4, gw:320, gh:470, title:516, meta:544, ts:23 },
+  square: { w:440, h:440, gx:104,gy:8, gw:232, gh:341, title:388, meta:410, ts:21 },
+  glass:  { w:320, h:470, gx:0,  gy:0, gw:320, gh:470, bare:true }
+};
+function roundRect(x, l, t, w, h, r){
+  x.beginPath();
+  x.moveTo(l+r, t);
+  x.arcTo(l+w, t, l+w, t+h, r);
+  x.arcTo(l+w, t+h, l, t+h, r);
+  x.arcTo(l, t+h, l, t, r);
+  x.arcTo(l, t, l+w, t, r);
+  x.closePath();
+}
+function savePNG(){
+  const svg = document.querySelector('#stage svg');
+  if (!svg || !current) return;
+  const btn = document.getElementById('save');
+  const label = btn.textContent;
+  btn.textContent = '저장 중…';
+
+  const clone = svg.cloneNode(true);
+  clone.setAttribute('width', VW);
+  clone.setAttribute('height', VH);
+  clone.querySelectorAll('[style]').forEach(n => n.removeAttribute('style'));
+  clone.querySelectorAll('[class]').forEach(n => n.removeAttribute('class'));
+
+  const L = SAVE_LAYOUT[saveMode] || SAVE_LAYOUT.card;
+  const img = new Image();
+  img.onload = function(){
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function(){
+      const s = 3;
+      const cv = document.createElement('canvas');
+      cv.width = L.w * s; cv.height = L.h * s;
+      const x = cv.getContext('2d');
+
+      /* 고른 색으로 만든 배경 — 두 명 이상이면 색끼리 이어지는 그라데이션 */
+      const tone = function(p, lig, sat){
+        return hslToHex(p.h, clamp(p.s * sat, 14, 62), lig);
+      };
+      const grad = function(x0, y0, x1, y1, lig, sat){
+        const gr = x.createLinearGradient(x0, y0, x1, y1);
+        const ps = current.palettes;
+        if (ps.length === 1) {
+          gr.addColorStop(0, tone(ps[0], lig + 1, sat * .7));
+          gr.addColorStop(1, tone(ps[0], lig - 4, sat));
+        } else {
+          ps.forEach(function(p, i){ gr.addColorStop(i / (ps.length - 1), tone(p, lig, sat)); });
+        }
+        return gr;
+      };
+
+      if (L.bare){
+        x.fillStyle = grad(0, 0, cv.width, cv.height, 96, .5);
+        x.fillRect(0, 0, cv.width, cv.height);
+      } else {
+        x.fillStyle = grad(0, 0, cv.width, cv.height, 88, .62);
+        x.fillRect(0, 0, cv.width, cv.height);
+        x.fillStyle = '#FFFFFF';
+        roundRect(x, 9*s, 9*s, (L.w-18)*s, (L.h-18)*s, 24*s); x.fill();
+        x.fillStyle = grad(9*s, 9*s, (L.w-9)*s, (L.h-9)*s, 96, .55);
+        roundRect(x, 9*s, 9*s, (L.w-18)*s, (L.h-18)*s, 24*s); x.fill();
+        x.strokeStyle = grad(9*s, 9*s, (L.w-9)*s, (L.h-9)*s, 86, .55);
+        x.lineWidth = 2*s;
+        roundRect(x, 9*s, 9*s, (L.w-18)*s, (L.h-18)*s, 24*s); x.stroke();
+      }
+
+      x.drawImage(img, L.gx*s, L.gy*s, L.gw*s, L.gh*s);
+
+      if (!L.bare){
+        const F = "'Pretendard Variable', Pretendard, sans-serif";
+        x.textAlign = 'center';
+        x.fillStyle = '#5E4450';
+        x.font = '800 ' + (L.ts*s) + 'px ' + F;
+        x.fillText(current.title, cv.width/2, L.title*s);
+        x.fillStyle = hslToHex(current.palettes[0].h, clamp(current.palettes[0].s * .5, 12, 46), 66);
+        x.font = '600 ' + (11.5*s) + 'px ' + F;
+        x.fillText('총 ' + current.net + ' g · ' + current.layers.length + '층 · ' +
+                   GLASSES[glassKey].ko + ' ' + current.sizeInfo.ml + 'ml', cv.width/2, L.meta*s);
+      }
+
+      const a = document.createElement('a');
+      a.download = current.title.replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'_') + '.png';
+      a.href = cv.toDataURL('image/png');
+      a.click();
+      btn.textContent = '저장했어요';
+      setTimeout(function(){ btn.textContent = label; }, 1600);
+    });
+  };
+  img.onerror = function(){ btn.textContent = '다시 시도'; };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
+}
+
+/* ---------- 시작 ---------- */
+const shared = readHash();
+renderTags();
+paintSegs();
+if (shared) serve(false); else emptyState();
+</script>
+</body>
+</html>
