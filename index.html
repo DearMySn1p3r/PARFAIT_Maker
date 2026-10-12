@@ -442,6 +442,93 @@
   .tp-o i{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--c);box-shadow:inset 0 -3px 0 rgba(0,0,0,.08),inset 0 0 0 1px rgba(0,0,0,.05)}
   .tp-o[aria-pressed=true]{background:#fff;border-color:var(--accent);color:var(--accent-ink)}
   .nt.l,.nt.r{left:auto;right:auto}
+
+  /* ================= first-version mood (soft pink) ================= */
+  :root{
+    --bg:#FFF1F6; --surface:#FFFFFF; --ink:#5E4450; --mid:#AC8A99; --soft:#D3B4C2;
+    --bd:#FFE4EE; --ctl-line:#FFE4EE; --line-2:#FFEFF5; --fill:#FFF3F8;
+    --accent:#FF6FA5; --accent-hover:#FF5C99; --accent-ink:#FF6FA5; --accent-soft:#FFF3F8; --pink:#FF9EC1; --pink-soft:#FFD3E4;
+    --save-bg:#5E4450;
+  }
+  body{background:linear-gradient(180deg,#FFE9F1 0%,#FFF1F6 46%,#FFF6F9 100%) fixed}
+  h1{color:var(--ink)}
+  .layout > .panel.controls,.stage-col,.recipe,.empty{box-shadow:0 10px 26px -16px rgba(255,111,165,.5)}
+  .stage-col,.empty{border:1.5px solid var(--bd)}
+  .slip-h,.sheet-h,.sheet{border-color:var(--bd)}
+  .controls .field + .field,.controls .field[data-sec=glass]{border-top:1px solid var(--bd)}
+  .controls .field-h h2{color:var(--accent)}
+  .controls .field:not([hidden]) .field-h h2::before{color:#FFB0CC}
+  html{background:#FFF6F9}
+  .controls .field-h:hover{background:var(--fill)}
+  .field-h .chev{background:var(--fill)}
+  .field-h .chev svg{stroke:var(--accent)}
+
+  /* segmented (mode / size / save) */
+  .seg,.seg.mode{display:flex;gap:4px;background:var(--fill);padding:4px;border-radius:999px;border:1.5px solid var(--bd)}
+  .seg button,.seg.mode button{border-radius:999px;color:var(--mid);font-weight:600;transition:transform .16s cubic-bezier(.34,1.8,.5,1),color .16s,background .16s,box-shadow .16s}
+  .seg button:hover{color:var(--accent)}
+  .seg button:active{transform:scale(.93)}
+  .seg button[aria-pressed=true],.seg.mode button[aria-pressed=true]{background:#fff;color:var(--accent);font-weight:700;box-shadow:0 1px 4px rgba(255,111,165,.22)}
+  .seg button[aria-pressed=true] small{color:var(--accent);opacity:.7}
+
+  /* name pills */
+  .guest,.lrow,.controls .text-in{background:var(--fill);border:1.5px solid var(--bd);transition:border-color .15s,box-shadow .15s,transform .16s cubic-bezier(.34,1.7,.5,1)}
+  .guest:focus-within,.lrow:focus-within,.controls .text-in:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--fill)}
+  .guest:hover,.lrow:hover{transform:translateY(-1px)}
+  .guest input{font-weight:700}
+  .guest input::placeholder,.controls .text-in::placeholder{color:var(--soft)}
+  .csw{box-shadow:inset 0 -2px 3px rgba(0,0,0,.09),inset 0 2px 2px rgba(255,255,255,.45),0 0 0 2px #fff}
+  .icon-btn:hover:not(:disabled){background:#fff;color:var(--accent)}
+  .add-btn{background:transparent;border:1.5px dashed var(--pink-soft);color:var(--accent);font-weight:700}
+  .add-btn:hover:not(:disabled){background:var(--fill);color:var(--accent);border-color:var(--pink)}
+  .ltype{background:#fff}
+  .ltype:hover{background:#fff;color:var(--accent)}
+
+  /* glass tiles / toppings / chips */
+  .gtile,.top-btn{background:var(--fill);border:1.5px solid var(--bd)}
+  .gtile .gt{stroke:var(--soft)}
+  .gtile[aria-pressed=true],.top-btn[aria-pressed=true]{background:#fff;border-color:var(--pink);box-shadow:0 2px 0 rgba(255,158,193,.3)}
+  .gtile[aria-pressed=true] .gt{stroke:var(--accent);fill:var(--pink-soft)}
+  .gtile[aria-pressed=true] span,.top-btn[aria-pressed=true] span{color:var(--accent);font-weight:700}
+  .chip{background:var(--fill);border:1.5px solid var(--bd);color:var(--mid)}
+  .chip i{border-color:var(--pink-soft);background:#fff}
+  .chip[aria-pressed=true]{background:#fff;border-color:var(--pink-soft);color:var(--accent)}
+  .chip[aria-pressed=true] i{background:var(--accent);border-color:var(--accent)}
+
+  /* buttons */
+  .btn--primary,.make-row .btn--primary{color:#fff;border:0;background:linear-gradient(180deg,var(--pink) 0%,var(--accent) 100%);
+    box-shadow:0 3px 0 #F06A9E,0 10px 20px -10px rgba(255,111,165,.7);transition:transform .15s cubic-bezier(.34,1.8,.5,1),box-shadow .15s,filter .15s}
+  .btn--primary:hover{background:linear-gradient(180deg,var(--pink) 0%,var(--accent) 100%);filter:brightness(1.05);transform:translateY(-1px)}
+  .btn--primary:active{transform:translateY(3px);box-shadow:0 0 0 #F06A9E,0 6px 14px -10px rgba(255,111,165,.7)}
+  .btn--line,.make-row .btn--line{background:#fff;color:var(--mid);border:1.5px solid var(--bd);box-shadow:0 2px 0 rgba(255,158,193,.18)}
+  .btn--line:hover{color:var(--accent);border-color:var(--pink-soft)}
+  .btn--line:active{transform:translateY(2px);box-shadow:0 0 0}
+  .acts .btn--dark{background:var(--fill);color:var(--accent);border:1.5px solid var(--pink-soft);box-shadow:0 2px 0 rgba(255,158,193,.3)}
+  .acts .btn--dark:hover{background:#FFE9F2}
+  .acts .btn--dark:active{transform:translateY(2px);box-shadow:0 0 0}
+  .btn:focus-visible,.seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+
+  /* stage + eat bar */
+  .stage{background:radial-gradient(circle at 50% 60%,#FFE3EE 0 33%,#FFF2F7 33.3% 37%,transparent 37.3%),#fff}
+  .nt::after{border-top-color:var(--pink-soft)}
+  .tableno{color:var(--mid)}
+  .eat{background:var(--ink)}
+  .eat .btn{background:linear-gradient(180deg,var(--pink),var(--accent))}
+
+  /* receipt */
+  .rc-t{color:var(--accent)}
+  .recipe .tags span{background:var(--fill);border:1.5px solid var(--bd);color:var(--accent);font-weight:600}
+  .recipe .box{background:var(--fill);border:1.5px solid var(--bd)}
+  .recipe .box-t{color:var(--accent)}
+  .sheet-h h3{color:var(--accent)}
+  ol.ings .lead{border-bottom-color:var(--pink-soft)}
+  .barcode{opacity:.85}
+  .typepop{box-shadow:0 20px 44px -18px rgba(255,111,165,.6)}
+  .tp-o{background:var(--fill)}
+  .tp-o:hover{background:#FFE9F2}
+  .tp-o[aria-pressed=true]{border-color:var(--pink);color:var(--accent)}
+  .pop{border-color:var(--bd)}
+  .toast{background:var(--accent);color:#fff;border:2.5px solid #fff;border-radius:999px;box-shadow:0 10px 24px -10px rgba(255,111,165,.9)}
 </style>
 </head>
 <body>
@@ -1555,7 +1642,7 @@ function paintMode(){
   renderSeg($('segMode'), [['auto','By Name'],['custom','Custom']], () => mode, function(k){
     if (k === mode) return;
     mode = k; Sound.tick(); setFoldForMode(); showMode();
-    if (mode === 'custom'){ current = buildCustom(custom, sizeKey); render(true); Sound.stack(current.layers.length); }
+    if (mode === 'custom'){ rollNos(); current = buildCustom(custom, sizeKey); render(true); Sound.stack(current.layers.length); }
     else if (current && current.kind === 'custom'){ current = null; eatY = null; emptyState(); writeHash(); }
   });
 }
@@ -1652,7 +1739,7 @@ $deco.addEventListener('click', function(e){
 function make(){
   Sound.unlock();
   if (mode === 'auto') serve(true, true);
-  else { current = buildCustom(custom, sizeKey); render(true); Sound.stack(current.layers.length); scrollToPlate(); }
+  else { rollNos(); current = buildCustom(custom, sizeKey); render(true); Sound.stack(current.layers.length); scrollToPlate(); }
 }
 $('make').addEventListener('click', make);
 $('dice').addEventListener('click', function(){
@@ -1698,7 +1785,15 @@ function scrollToPlate(){
   const pr = $plate.getBoundingClientRect();
   if (pr.top > window.innerHeight * 0.6) $plate.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block:'start' });
 }
+let orderNo = 1000, tableNo = 1;
+function rollNos(){
+  let o; do { o = 1000 + Math.floor(Math.random() * 9000); } while (o === orderNo);
+  let t; do { t = 1 + Math.floor(Math.random() * 99); } while (t === tableNo);
+  orderNo = o; tableNo = t;
+}
+rollNos();
 function serve(reseed, sfx){
+  if (sfx !== false) rollNos();
   if (reseed) salt = 0;
   current = buildRecipe(named(guests), salt, sizeKey);
   render(true);
@@ -1733,7 +1828,7 @@ function render(animate){
   $plate.innerHTML =
     '<div class="result">' +
       '<div class="stage-col">' +
-        '<div class="tableno">TABLE<b>' + String(hashStr(r.title) % 90 + 10) + '</b></div>' +
+        '<div class="tableno">TABLE<b>' + String(tableNo) + '</b></div>' +
         '<div class="stage" id="stage" title="눌러서 한 입 먹기"><div class="pfw">' + buildSVG(r, animate, glassKey, deco) + layerNotes(r) + '</div></div>' +
         '<div class="eat"><button type="button" class="btn" id="bite"></button><div class="bar"><i id="barFill"></i></div><small id="biteN"></small></div>' +
       '</div>' +
@@ -1766,7 +1861,7 @@ function render(animate){
   $('save').addEventListener('click', savePNG);
   $('bite').addEventListener('click', eat);
   $('stage').addEventListener('click', eat);
-  const on = $('orderNo'); if (on) on.textContent = 'No.' + String(hashStr(r.title + r.salt) % 9000 + 1000);
+  const on = $('orderNo'); if (on) on.textContent = 'No.' + orderNo;
   updateEat();
   writeHash();
 }
@@ -2015,7 +2110,7 @@ function savePNG(){
   img.onerror = function(){ btn.textContent = 'Try again'; setTimeout(() => { btn.textContent = label; }, 1800); };
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
 }
-const CV = { ink:'#3A2E33', mid:'#85767C', soft:'#BBADB3', line:'#EADCE1', pink:'#EE7FA2', pinkSoft:'#FDEEF3', bg:'#FBF2F4', mint:'#9FD8C1', butter:'#F6D27E',
+const CV = { ink:'#5E4450', mid:'#AC8A99', soft:'#D3B4C2', line:'#FFD9E7', pink:'#FF6FA5', pinkSoft:'#FFF3F8', bg:'#FFEEF4', mint:'#9FD8C1', butter:'#F6D27E',
   sans:"'Pretendard Variable', Pretendard, sans-serif", mono:"'Fredoka', 'Pretendard Variable', sans-serif" };
 function cvNew(w, h, s){
   const cv = document.createElement('canvas'); cv.width = w * s; cv.height = h * s;
@@ -2069,7 +2164,7 @@ function drawRecipeCard(img){
   let y = top + 34;
   cvLogo(x, L, y - 14, .62);
   cvText(x, 'Parfait Maker', L + 26, y, '800 15px ' + CV.sans, CV.ink);
-  cvText(x, 'No.' + (hashStr(r.title + r.salt) % 9000 + 1000), R, y - 1, '500 10.5px ' + CV.mono, CV.mid, 'right');
+  cvText(x, 'No.' + orderNo, R, y - 1, '500 10.5px ' + CV.mono, CV.mid, 'right');
   y += 16; cvDash(x, L, R, y);
   const cy = y + 14 + imgH * .58;
   cvPlate(x, W / 2, cy, imgW * .5);
